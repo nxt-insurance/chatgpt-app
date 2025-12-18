@@ -50,7 +50,12 @@ export const LiabilityQuoteInputSchema = z.object({
   }),
   familyCoverage: z.boolean().default(false).describe('Include family members in coverage'),
   dronesCoverage: z.boolean().default(false).describe('Include drone liability coverage'),
-  deductibleAmount: z.enum([0, 150, 300, 500] as const, {
+  deductibleAmount: z.union([
+    z.literal(0),
+    z.literal(150),
+    z.literal(300),
+    z.literal(500),
+  ], {
     description: 'Deductible amount in EUR (higher deductible = lower premium)',
   }).default(0),
   previousInsurance: z.boolean().default(false).describe('Had previous liability insurance'),
@@ -67,6 +72,7 @@ export interface MCPTool {
   name: string;
   description: string;
   inputSchema: z.ZodType<any>;
+  jsonSchema?: any;
   handler: (params: any) => Promise<any>;
 }
 

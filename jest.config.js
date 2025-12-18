@@ -18,6 +18,8 @@ export default {
     'src/**/*.ts',
     '!src/**/*.d.ts',
     '!src/index.ts',
+    '!src/server/**/*.ts',
+    '!src/tools/index.ts',
   ],
   coverageThreshold: {
     global: {

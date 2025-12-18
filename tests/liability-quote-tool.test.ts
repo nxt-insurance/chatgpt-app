@@ -157,7 +157,6 @@ describe('LiabilityQuoteTool', () => {
 
     it('should handle all deductible amounts', async () => {
       const deductibles: Array<0 | 150 | 300 | 500> = [0, 150, 300, 500];
-      const basePremium = 9.99;
       const expectedPremiums = [9.99, 8.99, 8.49, 7.99];
 
       for (let i = 0; i < deductibles.length; i++) {

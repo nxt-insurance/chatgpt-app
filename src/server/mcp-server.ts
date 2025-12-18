@@ -51,18 +51,13 @@ export class MCPServer {
   private setupHandlers(): void {
     this.server.setRequestHandler(ListToolsRequestSchema, async () => {
       const tools = getAllTools();
+      const toolsList = tools.map(tool => ({
+        name: tool.name,
+        description: tool.description,
+        inputSchema: tool.jsonSchema || {},
+      }));
 
-      return {
-        tools: tools.map(tool => ({
-          name: tool.name,
-          description: tool.description,
-          inputSchema: {
-            type: 'object',
-            properties: tool.inputSchema._def.schema?.shape || {},
-            required: Object.keys(tool.inputSchema._def.schema?.shape || {}),
-          },
-        })),
-      };
+      return { tools: toolsList };
     });
 
     this.server.setRequestHandler(CallToolRequestSchema, async (request) => {

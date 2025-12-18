@@ -3,6 +3,7 @@
  * Exposed to ChatGPT/Claude for quote calculations
  */
 
+import { zodToJsonSchema } from 'zod-to-json-schema';
 import { LiabilityClient } from '../clients/liability-client.js';
 import {
   LiabilityQuoteInputSchema,
@@ -14,10 +15,15 @@ import {
 export function createLiabilityQuoteTool(): MCPTool {
   const client = new LiabilityClient();
 
+  // Pre-convert schema to JSON Schema to avoid TypeScript type inference issues
+  // @ts-expect-error - zodToJsonSchema has deep type inference issues with complex schemas
+  const jsonSchema: any = zodToJsonSchema(LiabilityQuoteInputSchema);
+
   return {
     name: 'get_liability_quote',
     description: 'Calculate anonymous liability insurance quote for Germany. Supports basic, comfort, and premium coverage levels with optional family and drone coverage. Returns monthly and annual premiums.',
     inputSchema: LiabilityQuoteInputSchema,
+    jsonSchema,
     handler: async (params): Promise<LiabilityQuoteResult> => {
       try {
         const quote = await client.calculateQuote(params);
